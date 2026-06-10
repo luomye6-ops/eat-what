@@ -163,6 +163,20 @@ button:active,
   font: inherit;
 }
 
+.healthy-mode-option {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  padding: 12px;
+  background: #eef7ef;
+}
+
+.healthy-mode-option input {
+  width: auto;
+  accent-color: #5f8f68;
+}
+
 .ingredient-match-panel h3 {
   margin: 0;
   color: #3f3026;
@@ -327,6 +341,15 @@ button:active,
   line-height: 1.5;
 }
 
+.nutrition-summary {
+  align-self: flex-start;
+  border-radius: 999px;
+  padding: 5px 9px;
+  color: #4f7a59;
+  background: #eef7ef;
+  font-weight: 700;
+}
+
 .recipe-card-actions {
   display: flex;
   flex-wrap: wrap;
@@ -419,6 +442,21 @@ button:active,
   margin-bottom: 8px;
 }
 
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.nutrition-grid p {
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #eef7ef;
+  color: #4f7a59;
+  font-weight: 700;
+}
+
 .favorites-header {
   align-items: center;
 }
@@ -507,6 +545,10 @@ button:active,
   }
 
   .recipe-detail-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nutrition-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

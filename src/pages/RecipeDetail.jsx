@@ -59,6 +59,18 @@ function RecipeDetail() {
         <p>分类：{recipe.category}</p>
       </div>
 
+      {recipe.nutrition && (
+        <div className="recipe-detail-section nutrition-detail">
+          <h3>营养信息</h3>
+          <div className="nutrition-grid">
+            <p>热量：{recipe.nutrition.kcal} kcal</p>
+            <p>蛋白质：{recipe.nutrition.protein}g</p>
+            <p>脂肪：{recipe.nutrition.fat}g</p>
+            <p>碳水：{recipe.nutrition.carbs}g</p>
+          </div>
+        </div>
+      )}
+
       <div className="recipe-detail-section">
         <h3>食材</h3>
         <ul>

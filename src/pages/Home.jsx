@@ -48,6 +48,8 @@ function getHistoryCount(recipeId, history) {
 function filterRecipes(preferences) {
   return recipes.filter((recipe) => {
     const recipeMinutes = getRecipeMinutes(recipe.time)
+    const isHealthyRecipe =
+      recipe.nutrition && recipe.nutrition.kcal <= 500 && recipe.nutrition.fat <= 25
     const hasDislikedIngredient = preferences.dislikedIngredients.some((ingredient) =>
       recipe.ingredients.some((item) => item.includes(ingredient)),
     )
@@ -61,6 +63,10 @@ function filterRecipes(preferences) {
     }
 
     if (preferences.maxTime && recipeMinutes > Number(preferences.maxTime)) {
+      return false
+    }
+
+    if (preferences.healthyMode && !isHealthyRecipe) {
       return false
     }
 
@@ -130,10 +136,10 @@ function Home() {
   }
 
   function handleFilterChange(event) {
-    const { name, value } = event.target
+    const { checked, name, type, value } = event.target
     const nextPreferences = {
       ...preferences,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }
 
     updatePreferences(nextPreferences)
@@ -269,6 +275,16 @@ function Home() {
             </select>
           </label>
         </div>
+
+        <label className="healthy-mode-option">
+          <input
+            checked={preferences.healthyMode}
+            name="healthyMode"
+            type="checkbox"
+            onChange={handleFilterChange}
+          />
+          健康模式（优先低热量、低脂肪）
+        </label>
 
         <div className="disliked-editor">
           <label>

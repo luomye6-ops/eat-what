@@ -17,6 +17,7 @@ const recipes = [
       '倒回鸡蛋，加盐和少许白糖调味，撒葱花即可。',
     ],
     tips: '番茄炒软一点更容易出汁，白糖只放一点点用来平衡酸味。',
+    nutrition: { kcal: 280, protein: 16, fat: 18, carbs: 12 },
   },
   {
     id: 2,
@@ -35,6 +36,7 @@ const recipes = [
       '锅中放蒜片和青椒翻炒，再倒回肉丝，加盐炒匀。',
     ],
     tips: '肉丝先腌一下会更嫩，炒肉时火稍大一些，变色后马上盛出。',
+    nutrition: { kcal: 360, protein: 28, fat: 22, carbs: 10 },
   },
   {
     id: 3,
@@ -53,6 +55,7 @@ const recipes = [
       '倒入土豆丝大火翻炒，加入醋和盐，炒至断生即可。',
     ],
     tips: '土豆丝冲洗后口感更脆，炒的时间不要太久。',
+    nutrition: { kcal: 240, protein: 5, fat: 10, carbs: 35 },
   },
   {
     id: 4,
@@ -71,6 +74,7 @@ const recipes = [
       '加入少量清水和生抽煮3分钟，倒入淀粉水收汁，撒花椒粉和葱花。',
     ],
     tips: '翻动豆腐时动作轻一点，避免把豆腐炒碎。',
+    nutrition: { kcal: 420, protein: 24, fat: 28, carbs: 14 },
   },
   {
     id: 5,
@@ -89,6 +93,7 @@ const recipes = [
       '加入姜片、生抽、老抽和可乐，小火煮至汤汁变浓。',
     ],
     tips: '收汁时要勤看锅，汤汁变浓后容易糊底。',
+    nutrition: { kcal: 520, protein: 34, fat: 30, carbs: 28 },
   },
   {
     id: 6,
@@ -107,6 +112,7 @@ const recipes = [
       '倒入西兰花翻炒，加盐和蚝油调味。',
     ],
     tips: '焯水时间不要太长，西兰花颜色变绿就可以捞出。',
+    nutrition: { kcal: 120, protein: 7, fat: 6, carbs: 12 },
   },
   {
     id: 7,
@@ -125,6 +131,7 @@ const recipes = [
       '倒回茄子，加入生抽、老抽、白糖和盐，最后用淀粉水收汁。',
     ],
     tips: '茄子容易吸油，可以先用少许盐抓一下再煎。',
+    nutrition: { kcal: 330, protein: 5, fat: 24, carbs: 25 },
   },
   {
     id: 8,
@@ -143,6 +150,7 @@ const recipes = [
       '倒回鸡蛋，加盐炒匀即可。',
     ],
     tips: '黄瓜不用炒太久，保持脆感会更好吃。',
+    nutrition: { kcal: 220, protein: 14, fat: 16, carbs: 6 },
   },
   {
     id: 9,
@@ -161,6 +169,7 @@ const recipes = [
       '先炒肉丝，再放配菜翻炒，最后倒入料汁炒匀。',
     ],
     tips: '料汁提前调好，炒的时候更不容易手忙脚乱。',
+    nutrition: { kcal: 390, protein: 27, fat: 20, carbs: 24 },
   },
   {
     id: 10,
@@ -179,6 +188,7 @@ const recipes = [
       '加入干辣椒和黄瓜丁翻炒，倒入调味汁，最后放花生米。',
     ],
     tips: '花生米最后放，口感会更脆。',
+    nutrition: { kcal: 460, protein: 35, fat: 25, carbs: 20 },
   },
   {
     id: 11,
@@ -197,6 +207,7 @@ const recipes = [
       '炒软后加盐调味即可。',
     ],
     tips: '青菜下锅后用大火快炒，出水少，颜色也更好看。',
+    nutrition: { kcal: 90, protein: 4, fat: 5, carbs: 8 },
   },
   {
     id: 12,
@@ -215,6 +226,7 @@ const recipes = [
       '加入生抽、蚝油和盐，翻炒均匀即可。',
     ],
     tips: '老豆腐更适合煎，不容易碎。',
+    nutrition: { kcal: 350, protein: 22, fat: 23, carbs: 15 },
   },
   {
     id: 13,
@@ -233,6 +245,7 @@ const recipes = [
       '放入面条煮熟，加入鸡蛋和青菜，盐和生抽调味。',
     ],
     tips: '番茄多炒一会儿，汤底会更浓。',
+    nutrition: { kcal: 430, protein: 18, fat: 12, carbs: 62 },
   },
   {
     id: 14,
@@ -251,6 +264,7 @@ const recipes = [
       '放入青菜翻炒，加盐和蚝油调味。',
     ],
     tips: '香菇先炒出香味，再放青菜，味道会更鲜。',
+    nutrition: { kcal: 130, protein: 6, fat: 6, carbs: 14 },
   },
   {
     id: 15,
@@ -269,6 +283,7 @@ const recipes = [
       '炒香洋葱后倒回牛肉，加盐和黑胡椒炒匀。',
     ],
     tips: '牛肉不要久炒，变色后盛出可以减少变老的情况。',
+    nutrition: { kcal: 420, protein: 32, fat: 25, carbs: 16 },
   },
   {
     id: 16,
@@ -287,6 +302,7 @@ const recipes = [
       '加入冬瓜继续煮10分钟，加盐和葱花即可。',
     ],
     tips: '汤类盐最后放，味道更清爽。',
+    nutrition: { kcal: 360, protein: 26, fat: 22, carbs: 12 },
   },
   {
     id: 17,
@@ -305,6 +321,7 @@ const recipes = [
       '加盐调味，出锅前滴少许香油和葱花。',
     ],
     tips: '蛋液沿着锅边慢慢倒，蛋花会更漂亮。',
+    nutrition: { kcal: 110, protein: 8, fat: 7, carbs: 4 },
   },
   {
     id: 18,
@@ -323,6 +340,7 @@ const recipes = [
       '倒入蒜苔翻炒至断生，再放回肉丝，加盐炒匀。',
     ],
     tips: '蒜苔炒到颜色变深、口感还有一点脆时最好吃。',
+    nutrition: { kcal: 330, protein: 24, fat: 18, carbs: 16 },
   },
   {
     id: 19,
@@ -341,6 +359,7 @@ const recipes = [
       '倒入包菜大火翻炒，加生抽、醋和盐调味。',
     ],
     tips: '包菜一定要沥干水分，大火快炒才香。',
+    nutrition: { kcal: 160, protein: 5, fat: 9, carbs: 18 },
   },
   {
     id: 20,
@@ -359,6 +378,7 @@ const recipes = [
       '加入蚝油、生抽和少许水煮开，淋在生菜上即可。',
     ],
     tips: '生菜焯水几秒就够，时间太长会变软发黄。',
+    nutrition: { kcal: 100, protein: 4, fat: 5, carbs: 10 },
   },
 ]
 

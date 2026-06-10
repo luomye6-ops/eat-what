@@ -34,6 +34,11 @@ function RecipeCard({ recipe, onFavoriteChange }) {
         <p>用时：{recipe.time}</p>
         <p>难度：{recipe.difficulty}</p>
         <p>口味：{recipe.taste}</p>
+        {recipe.nutrition && (
+          <p className="nutrition-summary">
+            {recipe.nutrition.kcal} kcal · 蛋白质 {recipe.nutrition.protein}g
+          </p>
+        )}
 
         <div className="recipe-card-actions">
           <button type="button" onClick={handleFavoriteClick}>

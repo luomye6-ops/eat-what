@@ -83,6 +83,7 @@ export function getPreferences() {
     taste: '',
     difficulty: '',
     maxTime: '',
+    healthyMode: false,
     dislikedIngredients: [],
   }
   const savedPreferences = readJson(PREFERENCES_KEY, defaultPreferences)
