@@ -1,4 +1,4 @@
-// 顶部标题组件，后续可以加入搜索或设置入口。
+// 顶部标题组件，显示软件名称。
 function Header() {
   return (
     <header className="header">
