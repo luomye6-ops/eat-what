@@ -126,6 +126,7 @@ button:active,
 }
 
 .filter-panel,
+.ai-question-panel,
 .ingredient-match-panel,
 .history-panel {
   display: flex;
@@ -177,23 +178,27 @@ button:active,
   accent-color: #5f8f68;
 }
 
+.ai-question-panel h3,
 .ingredient-match-panel h3 {
   margin: 0;
   color: #3f3026;
   font-size: 20px;
 }
 
+.ai-question-panel p,
 .ingredient-match-panel p {
   margin: 8px 0 0;
   color: #6f6258;
   line-height: 1.6;
 }
 
+.ai-question-row,
 .ingredient-match-row {
   display: flex;
   gap: 10px;
 }
 
+.ai-question-row input,
 .ingredient-match-row input {
   flex: 1;
   min-width: 0;
@@ -205,9 +210,25 @@ button:active,
   font: inherit;
 }
 
+.ai-question-row button,
 .ingredient-match-row button {
   flex: 0 0 auto;
   background: #5f8f68;
+}
+
+.parsed-question {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.parsed-question span {
+  border-radius: 999px;
+  padding: 7px 10px;
+  color: #4f7a59;
+  background: #eef7ef;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .ingredient-match-summary {
@@ -526,10 +547,12 @@ button:active,
     min-width: 0;
   }
 
+  .ai-question-row,
   .ingredient-match-row {
     flex-direction: column;
   }
 
+  .ai-question-row button,
   .ingredient-match-row button {
     width: 100%;
   }

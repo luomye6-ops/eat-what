@@ -29,6 +29,21 @@ function parseIngredientText(text) {
     .filter(Boolean)
 }
 
+function cleanIngredientName(ingredient) {
+  return ingredient
+    .replace(/[0-9.]+/g, '')
+    .replace(/半|少许|适量|个|颗|根|盒|片|瓣|勺|把|听|克|毫升|块|朵|段/g, '')
+    .trim()
+}
+
+function getKnownIngredients() {
+  const ingredientNames = recipes.flatMap((recipe) =>
+    recipe.ingredients.map((ingredient) => cleanIngredientName(ingredient)),
+  )
+
+  return [...new Set(ingredientNames)].filter((ingredient) => ingredient.length > 0)
+}
+
 function getIngredientMatchCount(recipe, availableIngredients) {
   return availableIngredients.filter((ingredient) =>
     recipe.ingredients.some((item) => item.includes(ingredient)),
@@ -43,6 +58,74 @@ function getHistoryCount(recipeId, history) {
 
     return count + item.recipeIds.filter((id) => id === recipeId).length
   }, 0)
+}
+
+function getServingsNumber(servingsText) {
+  const matchedNumbers = servingsText.match(/\d+/g)
+
+  if (!matchedNumbers) {
+    return []
+  }
+
+  return matchedNumbers.map((number) => Number(number))
+}
+
+function canServePeople(recipe, peopleCount) {
+  if (!peopleCount) {
+    return true
+  }
+
+  const servingNumbers = getServingsNumber(recipe.servings)
+
+  if (servingNumbers.length === 1) {
+    return servingNumbers[0] >= peopleCount
+  }
+
+  if (servingNumbers.length >= 2) {
+    return peopleCount >= servingNumbers[0] && peopleCount <= servingNumbers[1]
+  }
+
+  return true
+}
+
+function parsePeopleCount(question) {
+  const numberMatch = question.match(/(\d+)\s*人/)
+
+  if (numberMatch) {
+    return Number(numberMatch[1])
+  }
+
+  if (question.includes('一个人') || question.includes('一人')) {
+    return 1
+  }
+
+  if (question.includes('两个人') || question.includes('二人')) {
+    return 2
+  }
+
+  if (question.includes('三个人') || question.includes('三人')) {
+    return 3
+  }
+
+  return ''
+}
+
+function parseQuestion(question) {
+  const knownIngredients = getKnownIngredients()
+  const tasteOptions = getUniqueOptions('taste')
+  const ingredients = knownIngredients.filter((ingredient) => question.includes(ingredient))
+  const directTaste = tasteOptions.find((taste) => question.includes(taste))
+  const taste =
+    directTaste ||
+    (question.includes('辣') ? '微辣' : '') ||
+    (question.includes('清淡') ? '清淡' : '') ||
+    (question.includes('酸甜') ? '酸甜' : '')
+
+  return {
+    ingredients,
+    taste,
+    peopleCount: parsePeopleCount(question),
+  }
 }
 
 function filterRecipes(preferences) {
@@ -110,12 +193,50 @@ function getIngredientMatchedRecipes(availableIngredients, history) {
     .map((item) => item.recipe)
 }
 
-// 首页展示筛选、用户偏好、食材匹配、今日推荐和最近 7 天推荐历史。
+function getQuestionRecommendedRecipes(parsedQuestion, history) {
+  const favoriteIds = getFavorites()
+  const hasIngredients = parsedQuestion.ingredients.length > 0
+
+  return recipes
+    .map((recipe) => {
+      const matchCount = getIngredientMatchCount(recipe, parsedQuestion.ingredients)
+      const matchesTaste = !parsedQuestion.taste || recipe.taste === parsedQuestion.taste
+      const matchesPeople = canServePeople(recipe, parsedQuestion.peopleCount)
+      const favoriteScore = favoriteIds.includes(recipe.id) ? 100 : 0
+      const historyScore = getHistoryCount(recipe.id, history) * 10
+      const matchScore = matchCount * 20
+      const tasteScore = parsedQuestion.taste && matchesTaste ? 8 : 0
+      const peopleScore = parsedQuestion.peopleCount && matchesPeople ? 5 : 0
+
+      return {
+        recipe,
+        matchesTaste,
+        matchesPeople,
+        matchCount,
+        score: favoriteScore + historyScore + matchScore + tasteScore + peopleScore,
+      }
+    })
+    .filter((item) => {
+      if (hasIngredients && item.matchCount === 0) {
+        return false
+      }
+
+      return item.matchesTaste && item.matchesPeople
+    })
+    .sort((first, second) => second.score - first.score)
+    .slice(0, 6)
+    .map((item) => item.recipe)
+}
+
+// 首页展示筛选、用户偏好、食材匹配、AI 问答推荐和最近 7 天推荐历史。
 function Home() {
   const [preferences, setPreferences] = useState(() => getPreferences())
   const [ingredientInput, setIngredientInput] = useState('')
   const [availableIngredientText, setAvailableIngredientText] = useState('')
   const [availableIngredients, setAvailableIngredients] = useState([])
+  const [aiQuestion, setAiQuestion] = useState('')
+  const [parsedQuestion, setParsedQuestion] = useState(null)
+  const [aiRecommendedRecipes, setAiRecommendedRecipes] = useState([])
   const [favoriteVersion, setFavoriteVersion] = useState(0)
   const [recommendedRecipes, setRecommendedRecipes] = useState(() =>
     getRandomRecipes(getPreferences()),
@@ -207,8 +328,34 @@ function Home() {
     )
   }
 
+  function handleAskQuestion() {
+    const question = aiQuestion.trim()
+
+    if (!question) {
+      setParsedQuestion(null)
+      setAiRecommendedRecipes([])
+      setMessage('请先输入一个问题')
+      return
+    }
+
+    const nextParsedQuestion = parseQuestion(question)
+    const nextRecipes = getQuestionRecommendedRecipes(nextParsedQuestion, history)
+
+    setParsedQuestion(nextParsedQuestion)
+    setAiRecommendedRecipes(nextRecipes)
+    setMessage(
+      nextRecipes.length > 0
+        ? '已根据你的问题生成推荐'
+        : '暂时没有找到符合问题的菜谱',
+    )
+  }
+
   function handleFavoriteChange() {
     setFavoriteVersion((currentVersion) => currentVersion + 1)
+
+    if (parsedQuestion) {
+      setAiRecommendedRecipes(getQuestionRecommendedRecipes(parsedQuestion, history))
+    }
   }
 
   const historyItems = history.map((item) => ({
@@ -319,6 +466,48 @@ function Home() {
         <button className="apply-filter-button" type="button" onClick={handleApplyFilters}>
           按偏好推荐
         </button>
+      </div>
+
+      <div className="ai-question-panel">
+        <div>
+          <h3>AI 问答推荐</h3>
+          <p>用自然语言描述你想吃什么，例如“我有鸡蛋和番茄，2个人，想吃酸甜的”。</p>
+        </div>
+
+        <div className="ai-question-row">
+          <input
+            value={aiQuestion}
+            onChange={(event) => setAiQuestion(event.target.value)}
+            placeholder="例如：我有土豆和青椒，想吃简单一点的菜"
+          />
+          <button type="button" onClick={handleAskQuestion}>
+            推荐
+          </button>
+        </div>
+
+        {parsedQuestion && (
+          <div className="parsed-question">
+            <span>食材：{parsedQuestion.ingredients.join('、') || '未识别'}</span>
+            <span>口味：{parsedQuestion.taste || '不限'}</span>
+            <span>人数：{parsedQuestion.peopleCount || '不限'}</span>
+          </div>
+        )}
+
+        {parsedQuestion && aiRecommendedRecipes.length === 0 && (
+          <p className="ingredient-match-empty">暂时没有符合问题的菜谱。</p>
+        )}
+
+        {aiRecommendedRecipes.length > 0 && (
+          <div className="recipe-list">
+            {aiRecommendedRecipes.map((recipe) => (
+              <RecipeCard
+                key={recipe.id}
+                recipe={recipe}
+                onFavoriteChange={handleFavoriteChange}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="ingredient-match-panel">
